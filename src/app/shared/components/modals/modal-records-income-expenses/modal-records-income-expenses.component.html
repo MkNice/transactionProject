@@ -32,8 +32,8 @@
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Transaction Type</mat-label>
     <mat-select formControlName="type">
-      <mat-option value="income">Income</mat-option>
-      <mat-option value="expense">Expense</mat-option>
+      <mat-option value="Income">Income</mat-option>
+      <mat-option value="Expense">Expense</mat-option>
     </mat-select>
     @if(transactionForm.get('type')?.hasError('required')){
     <mat-error> Transaction type is required </mat-error>
@@ -57,9 +57,6 @@
     <input matInput [matDatepicker]="picker" formControlName="date" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
-    @if(transactionForm.get('date')?.hasError('required')){
-    <mat-error> Date is required </mat-error>
-    }
   </mat-form-field>
   <button
     mat-raised-button

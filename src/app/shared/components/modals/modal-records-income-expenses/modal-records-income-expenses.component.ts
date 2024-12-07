@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ITransactions } from '../../../interfaces/transactions';
 
 @Component({
   selector: 'app-modal-records-income-expenses',
@@ -59,10 +60,10 @@ export class ModalRecordsIncomeExpensesComponent {
   }
 
   public onSubmit(): void {
-    if (this.transactionForm.valid) {
-      const formData = this.transactionForm.value;
-      console.log('Transaction Added:', formData);
-      this.dialogRef.close(formData);
+    if (!this.transactionForm.valid) {
+      return;
     }
+    const formData = this.transactionForm.value;
+    this.dialogRef.close(formData);
   }
 }
