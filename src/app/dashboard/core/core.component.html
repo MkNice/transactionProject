@@ -1,0 +1,5 @@
+<app-balance></app-balance>
+<app-transaction-button
+  (dataDialog)="dataDialog = $event"
+></app-transaction-button>
+<app-transaction-list [dataFromDialog]="dataDialog"></app-transaction-list>

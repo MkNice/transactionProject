@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { BalanceComponent } from './dashboard/balance/balance.component';
+import { CoreComponent } from './dashboard/core/core.component';
 
 export const routes: Routes = [
   {
     path: '**',
-    redirectTo: 'balance',
+    redirectTo: 'core',
   },
   {
-    path: 'balance',
-    component: BalanceComponent,
+    path: 'core',
+    component: CoreComponent,
   },
 ];

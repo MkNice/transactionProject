@@ -1,13 +1,39 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { ModalRecordsIncomeExpensesComponent } from '../../shared/components/modals/modal-records-income-expenses/modal-records-income-expenses.component';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { ITransactions } from '../../shared/interfaces/transactions';
+
 @Component({
   selector: 'app-transaction-button',
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, DialogModule],
   templateUrl: './transaction-button.component.html',
   styleUrl: './transaction-button.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionButtonComponent {
-  public openModal():void{
-    
+export class TransactionButtonComponent implements OnDestroy {
+  @Output() public dataDialog: EventEmitter<ITransactions> = new EventEmitter();
+
+  public dialog = inject(Dialog);
+
+  public openModal(): void {
+    const dialogRef = this.dialog.open<ITransactions>(
+      ModalRecordsIncomeExpensesComponent
+    );
+
+    dialogRef.closed.subscribe((result) => {
+      this.dataDialog.emit(result);
+    });
+  }
+
+  public ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
   }
 }
