@@ -33,7 +33,8 @@ import { MatSelectModule } from '@angular/material/select';
   providers: [provideNativeDateAdapter()]
 })
 export class ModalRecordsIncomeExpensesComponent {
-  public dialogRef = inject(DialogRef);
+  private dialogRef = inject(DialogRef);
+  private fb = inject(FormBuilder);
 
   public transactionForm: FormGroup;
   public categories: string[] = [
@@ -44,7 +45,7 @@ export class ModalRecordsIncomeExpensesComponent {
     'Other',
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.transactionForm = this.fb.group({
       name: ['', Validators.required],
       amount: [

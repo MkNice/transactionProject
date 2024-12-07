@@ -16,42 +16,8 @@ import { ITransactions } from '../../shared/interfaces/transactions';
   styleUrl: './transaction-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionListComponent implements OnChanges {
-  @Input() public dataFromDialog!: ITransactions;
-
-  public transactions: ITransactions[] = [
-    {
-      name: 'Salary',
-      amount: 5000,
-      category: 'Income',
-      date: new Date('2023-12-01'),
-    },
-    {
-      name: 'Groceries',
-      amount: -150,
-      category: 'Expense',
-      date: new Date('2023-12-02'),
-    },
-    {
-      name: 'Utilities',
-      amount: -200,
-      category: 'Expense',
-      date: new Date('2023-12-03'),
-    },
-    {
-      name: 'Freelance',
-      amount: 1200,
-      category: 'Income',
-      date: new Date('2023-12-04'),
-    },
-  ];
+export class TransactionListComponent{
+  @Input() public transactions: ITransactions[] = []
 
   public displayedColumns: string[] = ['name', 'amount', 'category', 'date'];
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dataFromDialog'].isFirstChange()) {
-      return;
-    }
-    this.transactions = [this.dataFromDialog, ...this.transactions];
-  }
 }
