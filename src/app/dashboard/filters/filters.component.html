@@ -1,5 +1,6 @@
 <app-select
   [values]="categories"
+  [currentValue]="filters.get('category') || 'All'"
   (selectedValueChanged)="updateFilter($event, 'category')"
 >
   Filter by categories
@@ -7,6 +8,7 @@
 
 <app-select
   [values]="types"
+  [currentValue]="filters.get('type') || 'All'"
   (selectedValueChanged)="updateFilter($event, 'type')"
 >
   Filter by type transaction

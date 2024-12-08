@@ -1,5 +1,5 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -33,6 +33,7 @@ import { categories, TYPES } from '../../../constants';
   templateUrl: './modal-records-income-expenses.component.html',
   styleUrl: './modal-records-income-expenses.component.scss',
   providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalRecordsIncomeExpensesComponent {
   private dialogRef = inject(DialogRef);
@@ -41,7 +42,7 @@ export class ModalRecordsIncomeExpensesComponent {
   public transactionForm: FormGroup;
   public categories: Readonly<string[]> = categories;
   public TYPES = TYPES;
-  
+
   constructor() {
     this.transactionForm = this.fb.group({
       name: ['', Validators.required],
