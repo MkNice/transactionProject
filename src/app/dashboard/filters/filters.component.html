@@ -1,0 +1,13 @@
+<app-select
+  [values]="categories"
+  (selectedValueChanged)="updateFilter($event, 'category')"
+>
+  Filter by categories
+</app-select>
+
+<app-select
+  [values]="types"
+  (selectedValueChanged)="updateFilter($event, 'type')"
+>
+  Filter by type transaction
+</app-select>
