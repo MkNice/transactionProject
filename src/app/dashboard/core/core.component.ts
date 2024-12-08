@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  effect,
   inject,
-  OnInit,
+  signal,
 } from '@angular/core';
 import { ITransactions } from '../../shared/interfaces/transactions';
 import { TransactionButtonComponent } from '../transaction-button/transaction-button.component';
@@ -20,43 +22,43 @@ import { TransactionService } from '../../shared/services/transaction-storage.se
     FiltersComponent,
   ],
   templateUrl: './core.component.html',
-  styleUrl: './core.component.scss',
+  styleUrls: ['./core.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class CoreComponent implements OnInit {
+export class CoreComponent {
   private transactionService = inject(TransactionService);
 
-  public transactions: ITransactions[] = [];
-  public filters: Map<string, string> = new Map<string, string>();
-  public filteredTransactions: ITransactions[] = [];
-  public totalMoney: number = 0;
+  public transactions = signal<ITransactions[]>([]);
+  public filters = signal<Map<string, string>>(new Map([['category', 'All'], ['type', 'All']]));
 
+  public filteredTransactions = computed(() => this.applyFilters());
+  public totalMoney = computed(() =>
+    this.filteredTransactions().reduce(
+      (acc, { amount, type }) => acc + (type === 'Income' ? amount : -amount),
+      0
+    )
+  );
 
-  public ngOnInit(): void {
+  constructor() {
+    effect(() => {
+      this.transactionService.saveTransactions(this.transactions());
+      this.transactionService.saveFilters(this.filters());
+    });
+  }
+
+  ngOnInit(): void {
     this.loadState();
-    this.updateState();
-    this.totalMoney = this.calculateTotal();
   }
 
   private loadState(): void {
-    this.transactions = this.transactionService.getTransactions();
-    this.filters = this.transactionService.getFilters();
-  }
-
-  private saveState(): void {
-    this.transactionService.saveTransactions(this.transactions);
-    this.transactionService.saveFilters(this.filters);
-  }
-
-  private updateState(): void {
-    this.filteredTransactions = this.applyFilters();
-    this.saveState();
+    this.transactions.set(this.transactionService.getTransactions());
+    this.filters.set(this.transactionService.getFilters());
   }
 
   private applyFilters(): ITransactions[] {
-    return this.transactions.filter((transaction) => {
-      for (const [key, value] of this.filters) {
+    const currentFilters = this.filters();
+    return this.transactions().filter((transaction) => {
+      for (const [key, value] of currentFilters) {
         if (value !== 'All' && transaction[key as keyof ITransactions] !== value) {
           return false;
         }
@@ -65,23 +67,12 @@ export class CoreComponent implements OnInit {
     });
   }
 
-  private calculateTotal(): number {
-    return this.filteredTransactions.reduce(
-      (acc, { amount, type }) => acc + (type === 'Income' ? amount : -amount),
-      0
-    );
-  }
-
   public addTransaction(newTransaction: ITransactions): void {
     if (!newTransaction) return;
-
-    this.transactions = [newTransaction, ...this.transactions];
-    this.updateState();
-    this.totalMoney = this.calculateTotal();
+    this.transactions.set([newTransaction, ...this.transactions()]);
   }
 
-  public updateFilters(filters: Map<string, string>): void {
-    this.filters = filters;
-    this.updateState();
+  public updateFilters(newFilters: Map<string, string>): void {
+    this.filters.set(newFilters);
   }
 }

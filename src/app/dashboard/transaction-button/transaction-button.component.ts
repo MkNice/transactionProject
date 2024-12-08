@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ModalRecordsIncomeExpensesComponent } from '../../shared/components/modals/modal-records-income-expenses/modal-records-income-expenses.component';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { ITransactions } from '../../shared/interfaces/transactions';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-button',
@@ -28,7 +29,7 @@ export class TransactionButtonComponent implements OnDestroy {
       ModalRecordsIncomeExpensesComponent
     );
 
-    dialogRef.closed.subscribe((result) => {
+    dialogRef.closed.pipe(take(1)).subscribe((result) => {
       this.dataDialog.emit(result);
     });
   }

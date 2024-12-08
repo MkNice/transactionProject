@@ -1,7 +1,14 @@
-<app-balance>{{ totalMoney }}</app-balance>
+<app-balance>{{ totalMoney() }}</app-balance>
+<app-transaction-button
+  (dataDialog)="addTransaction($event)"
+></app-transaction-button>
+<div class="container">
+  <app-filters
+    [filters]="filters()"
+    (filterChanged)="updateFilters($event)"
+  ></app-filters>
+</div>
 
-<app-transaction-button (dataDialog)="addTransaction($event)"></app-transaction-button>
-
-<app-filters (filterChanged)="updateFilters($event)"></app-filters>
-
-<app-transaction-list [transactions]="filteredTransactions"></app-transaction-list>
+<app-transaction-list
+  [transactions]="filteredTransactions()"
+></app-transaction-list>
